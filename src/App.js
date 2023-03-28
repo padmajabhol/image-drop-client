@@ -1,5 +1,7 @@
+/* eslint-disable array-callback-return */
 import { useEffect, useState } from "react";
 import "./App.css";
+import Post from "./Post";
 
 const BASE_URL = "https://image-drop.onrender.com/";
 
@@ -24,7 +26,13 @@ function App() {
       });
   }, []);
 
-  return "Hello world";
+  return (
+    <div className="app_posts">
+      {posts.map((post) => (
+        <Post post={post} />
+      ))}
+    </div>
+  );
 }
 
 export default App;
