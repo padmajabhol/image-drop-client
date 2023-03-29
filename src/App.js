@@ -41,6 +41,7 @@ function App() {
   const [openSignUp, setOpenSignUp] = useState(false);
   const [modalStyle, setModalStyle] = useState(getModalStyle);
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authToken, setAuthToken] = useState(null);
   const [authTokenType, setAuthTokenType] = useState(null);
@@ -121,6 +122,16 @@ function App() {
     setOpenSignIn(false);
   };
 
+  const signUp = (event) => {
+    event.preventDefault();
+    let formData = new FormData();
+    formData.append("username", username);
+    formData.append("email", email);
+    formData.append("password", password);
+
+    setOpenSignUp(false);
+  };
+
   const signOut = (event) => {
     setAuthToken(null);
     setAuthTokenType(null);
@@ -158,6 +169,41 @@ function App() {
             />
             <Button type="submit" onClick={signIn}>
               Login
+            </Button>
+          </form>
+        </div>
+      </Modal>
+
+      <Modal open={openSignUp} onClose={() => setOpenSignUp(false)}>
+        <div style={modalStyle} className={classes.root}>
+          <form className="app_signin">
+            <center>
+              <img
+                className="app_headerImage"
+                src="https://www.citypng.com/public/uploads/preview/-51609111065frgb7hekox.png"
+                alt="ImageDrop"
+              />
+            </center>
+            <Input
+              placeholder="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <Input
+              placeholder="email"
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Input
+              placeholder="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button type="submit" onClick={signUp}>
+              SignUp
             </Button>
           </form>
         </div>
