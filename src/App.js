@@ -5,6 +5,7 @@ import { makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
 import "./App.css";
 import Post from "./Post";
+import ImageUpload from "./imageUpload";
 
 const BASE_URL = "https://image-drop.onrender.com/";
 
@@ -256,6 +257,7 @@ function App() {
           <Post post={post} />
         ))}
       </div>
+      {authToken ? <ImageUpload /> : <h3>You need to login to upload</h3>}
     </div>
   );
 }
