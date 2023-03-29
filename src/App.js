@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 import { Button, Modal, Input } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -44,6 +45,13 @@ function App() {
   const [authToken, setAuthToken] = useState(null);
   const [authTokenType, setAuthTokenType] = useState(null);
   const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    setAuthToken(window.localStorage.getItem("authToken"));
+    setAuthTokenType(window.localStorage.getItem("authTokenType"));
+    setUserId(window.localStorage.getItem("userId"));
+    setUsername(window.localStorage.getItem("username"));
+  }, []);
 
   useEffect(() => {
     fetch(BASE_URL + "posts/all")
@@ -100,6 +108,10 @@ function App() {
         setAuthTokenType(data.token_type);
         setUserId(data.user_id);
         setUsername(data.username);
+        window.localStorage.setItem("authToken", data.access_token);
+        window.localStorage.setItem("authTokenType", data.token_type);
+        window.localStorage.setItem("username", data.username);
+        window.localStorage.setItem("userId", data.user_id);
       })
       .catch((error) => {
         console.log(error);
@@ -114,6 +126,10 @@ function App() {
     setAuthTokenType(null);
     setUserId("");
     setUsername("");
+    window.localStorage.removeItem("authToken");
+    window.localStorage.removeItem("authTokenType");
+    window.localStorage.removeItem("username");
+    window.localStorage.removeItem("userId");
   };
 
   return (
