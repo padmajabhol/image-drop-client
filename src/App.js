@@ -1,4 +1,5 @@
 /* eslint-disable array-callback-return */
+import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import "./App.css";
 import Post from "./Post";
@@ -7,6 +8,9 @@ const BASE_URL = "https://image-drop.onrender.com/";
 
 function App() {
   const [posts, setPosts] = useState([]);
+
+  const [openSignIn, setOpenSignIn] = useState(false);
+  const [openSignUp, setOpenSignUp] = useState(false);
 
   useEffect(() => {
     fetch(BASE_URL + "posts/all")
@@ -41,10 +45,23 @@ function App() {
   }, []);
 
   return (
-    <div className="app_posts">
-      {posts.map((post) => (
-        <Post post={post} />
-      ))}
+    <div className="app">
+      <div className="app_header">
+        <img
+          className="app_headerImage"
+          src="https://www.citypng.com/public/uploads/preview/-51609111065frgb7hekox.png"
+          alt="ImageDrop"
+        />
+        <div>
+          <Button onClick={() => setOpenSignIn(true)}>Login</Button>
+          <Button onClick={() => setOpenSignUp(true)}>Signup</Button>
+        </div>
+      </div>
+      <div className="app_posts">
+        {posts.map((post) => (
+          <Post post={post} />
+        ))}
+      </div>
     </div>
   );
 }
