@@ -87,7 +87,7 @@ function App() {
   }, []);
 
   const signIn = (event) => {
-    event.preventDefault();
+    event?.preventDefault();
     let formData = new FormData();
     formData.append("username", username);
     formData.append("password", password);
@@ -123,11 +123,39 @@ function App() {
   };
 
   const signUp = (event) => {
-    event.preventDefault();
-    let formData = new FormData();
-    formData.append("username", username);
-    formData.append("email", email);
-    formData.append("password", password);
+    event?.preventDefault();
+    // let formData = new FormData();
+    // formData.append("username", username);
+    // formData.append("email", email);
+    // formData.append("password", password);
+
+    const json_string = JSON.stringify({
+      username: username,
+      email: email,
+      password: password,
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: json_string,
+    };
+
+    fetch(BASE_URL + "users", requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw response;
+      })
+      .then((data) => {
+        console.log(data);
+        signIn();
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error);
+      });
 
     setOpenSignUp(false);
   };
