@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from "react";
+import { Avatar, Button } from "@mui/material";
 import "./Post.css";
 
 const BASE_URL = "https://image-drop.onrender.com/";
@@ -23,6 +24,13 @@ function Post({ post }) {
 
   return (
     <div className="post">
+      <div className="post_header">
+        <Avatar alt="Catalin" src="" />
+        <div className="post_headerInfo">
+          <h3>{post.user.username}</h3>
+          <Button className="post_delete">Delete</Button>
+        </div>
+      </div>
       <img className="post_image" src={imageUrl} />
       <h4 className="post_text">{post.caption}</h4>
       <div className="post_comments">
