@@ -6,7 +6,7 @@ import "./Post.css";
 
 const BASE_URL = "https://image-drop.onrender.com/";
 
-function Post({ post }) {
+function Post({ post, authToken, authTokenType }) {
   const [imageUrl, setImageUrl] = useState("");
   const [comments, setComments] = useState([]);
 
@@ -22,13 +22,37 @@ function Post({ post }) {
     setComments(post.comments);
   }, []);
 
+  const handleDelete = (event) => {
+    event?.preventDefault();
+
+    const requestOptions = {
+      method: "DELETE",
+      headers: new Headers({
+        Authorization: authTokenType + " " + authToken,
+      }),
+    };
+
+    fetch(BASE_URL + "posts/delete/" + post.id, requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          window.location.reload();
+        }
+        throw response;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="post">
       <div className="post_header">
         <Avatar alt="Catalin" src="" />
         <div className="post_headerInfo">
           <h3>{post.user.username}</h3>
-          <Button className="post_delete">Delete</Button>
+          <Button className="post_delete" onClick={handleDelete}>
+            Delete
+          </Button>
         </div>
       </div>
       <img className="post_image" src={imageUrl} />

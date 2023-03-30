@@ -254,11 +254,19 @@ function App() {
       </div>
       <div className="app_posts">
         {posts.map((post) => (
-          <Post post={post} />
+          <Post
+            post={post}
+            authToken={authToken}
+            authTokenType={authTokenType}
+          />
         ))}
       </div>
       {authToken ? (
-        <ImageUpload authToken={authToken} authTokenType={authTokenType} />
+        <ImageUpload
+          authToken={authToken}
+          authTokenType={authTokenType}
+          userId={userId}
+        />
       ) : (
         <h3>You need to login to upload</h3>
       )}

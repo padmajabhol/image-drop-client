@@ -4,28 +4,30 @@ import "./imageUpload.css";
 
 const BASE_URL = "https://image-drop.onrender.com/";
 
-function ImageUpload({ authToken, authTokenType }) {
-  const [captions, setCaption] = useState("");
+function ImageUpload({ authToken, authTokenType, userId }) {
+  const [caption, setCaption] = useState("");
   const [image, setImage] = useState(null);
 
   const handleChange = (e) => {
-    if (e.target.file[0]) {
-      setImage(e.targe.file[0]);
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
     }
   };
 
   const handleUpload = (e) => {
     e?.preventDefault();
-    let formData = new FormData();
+
+    const formData = new FormData();
     formData.append("image", image);
 
     const requestOptions = {
       method: "POST",
       headers: new Headers({
-        Authorization: authTokenType + "" + authToken,
+        Authorization: authTokenType + " " + authToken,
       }),
       body: formData,
     };
+
     fetch(BASE_URL + "posts/image", requestOptions)
       .then((response) => {
         if (response.ok) {
@@ -34,8 +36,7 @@ function ImageUpload({ authToken, authTokenType }) {
         throw response;
       })
       .then((data) => {
-        setImage(null);
-        // create post here
+        createPost(data.filename);
       })
       .catch((error) => {
         console.log(error);
@@ -43,16 +44,50 @@ function ImageUpload({ authToken, authTokenType }) {
       .finally(() => {
         setCaption("");
         setImage(null);
-        document.getElementById("fileinput").value = null;
+        document.getElementById("fileInput").value = null;
       });
   };
+
+  const createPost = (imageUrl) => {
+    const json_string = JSON.stringify({
+      image_url: imageUrl,
+      image_url_type: "relative",
+      caption: caption,
+      creator_id: userId,
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: new Headers({
+        Authorization: authTokenType + " " + authToken,
+        "Content-Type": "application/json",
+      }),
+      body: json_string,
+    };
+
+    fetch(BASE_URL + "posts", requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw response;
+      })
+      .then((data) => {
+        window.location.reload();
+        window.scrollTo(0, 0);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="imageupload">
       <input
         type="text"
         placeholder="Enter a caption"
         onChange={(event) => setCaption(event.target.value)}
-        value={captions}
+        value={caption}
       />
       <input type="file" id="fileInput" onChange={handleChange} />
       <Button className="imageupload_button" onClick={handleUpload}>
