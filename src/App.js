@@ -257,7 +257,11 @@ function App() {
           <Post post={post} />
         ))}
       </div>
-      {authToken ? <ImageUpload /> : <h3>You need to login to upload</h3>}
+      {authToken ? (
+        <ImageUpload authToken={authToken} authTokenType={authTokenType} />
+      ) : (
+        <h3>You need to login to upload</h3>
+      )}
     </div>
   );
 }
