@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 import { Button, Modal, Input } from "@mui/material";
@@ -252,6 +253,15 @@ function App() {
           </div>
         )}
       </div>
+      {authToken ? (
+        <ImageUpload
+          authToken={authToken}
+          authTokenType={authTokenType}
+          userId={userId}
+        />
+      ) : (
+        <h3>You need to login to upload</h3>
+      )}
       <div className="app_posts">
         {posts.map((post) => (
           <Post
@@ -262,15 +272,6 @@ function App() {
           />
         ))}
       </div>
-      {authToken ? (
-        <ImageUpload
-          authToken={authToken}
-          authTokenType={authTokenType}
-          userId={userId}
-        />
-      ) : (
-        <h3>You need to login to upload</h3>
-      )}
     </div>
   );
 }
