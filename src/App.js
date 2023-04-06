@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 import { Button, Modal, Input } from "@mui/material";
+import { ThreeDots } from "react-loader-spinner";
 import { makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
 import "./App.css";
@@ -48,6 +49,7 @@ function App() {
   const [authToken, setAuthToken] = useState(null);
   const [authTokenType, setAuthTokenType] = useState(null);
   const [userId, setUserId] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setAuthToken(window.localStorage.getItem("authToken"));
@@ -57,10 +59,12 @@ function App() {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     fetch(BASE_URL + "posts/all")
       .then((response) => {
         const json = response.json();
         console.log(json);
+        setLoading(false);
         if (response.ok) {
           return json;
         }
@@ -181,7 +185,7 @@ function App() {
             <center>
               <img
                 className="app_headerImage"
-                src="https://www.citypng.com/public/uploads/preview/-51609111065frgb7hekox.png"
+                src="https://cdn-icons-png.flaticon.com/512/7452/7452157.png"
                 alt="ImageDrop"
               />
             </center>
@@ -210,7 +214,7 @@ function App() {
             <center>
               <img
                 className="app_headerImage"
-                src="https://www.citypng.com/public/uploads/preview/-51609111065frgb7hekox.png"
+                src="https://cdn-icons-png.flaticon.com/512/7452/7452157.png"
                 alt="ImageDrop"
               />
             </center>
@@ -238,39 +242,56 @@ function App() {
           </form>
         </div>
       </Modal>
-      <div className="app_header">
-        <img
-          className="app_headerImage"
-          src="https://www.citypng.com/public/uploads/preview/-51609111065frgb7hekox.png"
-          alt="ImageDrop"
-        />
+      <div className="inner_div">
+        <div className="app_header">
+          <img
+            className="app_headerImage"
+            src="https://cdn-icons-png.flaticon.com/512/7452/7452157.png"
+            alt="ImageDrop"
+          />
+          {authToken ? (
+            <Button onClick={() => signOut()}>Logout</Button>
+          ) : (
+            <div>
+              <Button onClick={() => setOpenSignIn(true)}>Login</Button>
+              <Button onClick={() => setOpenSignUp(true)}>Signup</Button>
+            </div>
+          )}
+        </div>
         {authToken ? (
-          <Button onClick={() => signOut()}>Logout</Button>
-        ) : (
-          <div>
-            <Button onClick={() => setOpenSignIn(true)}>Login</Button>
-            <Button onClick={() => setOpenSignUp(true)}>Signup</Button>
-          </div>
-        )}
-      </div>
-      {authToken ? (
-        <ImageUpload
-          authToken={authToken}
-          authTokenType={authTokenType}
-          userId={userId}
-        />
-      ) : (
-        <h3>You need to login to upload</h3>
-      )}
-      <div className="app_posts">
-        {posts.map((post) => (
-          <Post
-            post={post}
+          <ImageUpload
             authToken={authToken}
             authTokenType={authTokenType}
-            username={username}
+            userId={userId}
           />
-        ))}
+        ) : (
+          <h3>You need to login to upload</h3>
+        )}
+        {loading ? (
+          <div className="loader">
+            <ThreeDots
+              height="80"
+              width="80"
+              radius="9"
+              color="#b9dcff"
+              ariaLabel="three-dots-loading"
+              wrapperStyle={{}}
+              wrapperClassName=""
+              visible={true}
+            />
+          </div>
+        ) : (
+          <div className="app_posts">
+            {posts.map((post) => (
+              <Post
+                post={post}
+                authToken={authToken}
+                authTokenType={authTokenType}
+                username={username}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
